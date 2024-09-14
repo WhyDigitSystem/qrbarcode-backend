@@ -12,7 +12,7 @@
 	<artifactId>basesetup</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>basesetup</name>
-	<description>Base Project project for Spring Boot</description>
+	<description>QR Bar Code Generator</description>
 	<properties>
 		<java.version>8</java.version>
 	</properties>
