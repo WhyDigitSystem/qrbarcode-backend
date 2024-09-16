@@ -55,10 +55,12 @@ public class UserServiceImpl implements UserService {
 
 	private UserVO getUserVOFromSignUpFormDTO(SignUpFormDTO signUpRequest) {
 		UserVO userVO = new UserVO();
-		userVO.setFirstName(signUpRequest.getFirstName());
-		userVO.setLastName(signUpRequest.getLastName());
+//		userVO.setFirstName(signUpRequest.getFirstName());
+//		userVO.setLastName(signUpRequest.getLastName());
 		userVO.setUserName(signUpRequest.getUserName());
 		userVO.setEmail(signUpRequest.getEmail());
+		userVO.setEmployeeName(signUpRequest.getEmployeeName());
+		userVO.setNickName(signUpRequest.getNickName());
 		try {
 			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(signUpRequest.getPassword())));
 		} catch (Exception e) {
