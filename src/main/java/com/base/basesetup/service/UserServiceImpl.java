@@ -55,12 +55,14 @@ public class UserServiceImpl implements UserService {
 
 	private UserVO getUserVOFromSignUpFormDTO(SignUpFormDTO signUpRequest) {
 		UserVO userVO = new UserVO();
-		userVO.setFirstName(signUpRequest.getFirstName());
-		userVO.setLastName(signUpRequest.getLastName());
+//		userVO.setFirstName(signUpRequest.getFirstName());
+//		userVO.setLastName(signUpRequest.getLastName());
 		userVO.setUserName(signUpRequest.getUserName());
 		userVO.setEmail(signUpRequest.getEmail());
+		userVO.setEmployeeName(signUpRequest.getEmployeeName());
+		userVO.setNickName(signUpRequest.getNickName());
 		try {
-			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(signUpRequest.getPassword())));
+			userVO.setPassword(encoder.encode(CryptoUtils.decrypt(signUpRequest.getPassword())));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
@@ -101,7 +103,7 @@ public class UserServiceImpl implements UserService {
 	private boolean compareEncodedPasswordWithEncryptedPassword(String encryptedPassword, String encodedPassword) {
 		boolean userStatus = false;
 		try {
-			userStatus = encoder.matches(CryptoUtils.getDecrypt(encryptedPassword), encodedPassword);
+			userStatus = encoder.matches(CryptoUtils.decrypt(encryptedPassword), encodedPassword);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
@@ -176,7 +178,7 @@ public class UserServiceImpl implements UserService {
 			if (compareEncodedPasswordWithEncryptedPassword(changePasswordRequest.getOldPassword(),
 					userVO.getPassword())) {
 				try {
-					userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(changePasswordRequest.getNewPassword())));
+					userVO.setPassword(encoder.encode(CryptoUtils.decrypt(changePasswordRequest.getNewPassword())));
 				} catch (Exception e) {
 					throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
 				}
@@ -203,7 +205,7 @@ public class UserServiceImpl implements UserService {
 		UserVO userVO = userRepo.findByUserName(resetPasswordRequest.getUserName());
 		if (ObjectUtils.isNotEmpty(userVO)) {
 			try {
-				userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(resetPasswordRequest.getNewPassword())));
+				userVO.setPassword(encoder.encode(CryptoUtils.decrypt(resetPasswordRequest.getNewPassword())));
 			} catch (Exception e) {
 				throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
 			}
