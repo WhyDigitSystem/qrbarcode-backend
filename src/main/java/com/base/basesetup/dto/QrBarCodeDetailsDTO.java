@@ -11,7 +11,6 @@ public class QrBarCodeDetailsDTO {
 	private Long id;
 	private String partNo;
 	private String partDescription;
-	private Long count;
 	private String barCodeValue;
 	private String qrCodeValue;
 	

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -63,6 +64,8 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 		if (ObjectUtils.isNotEmpty(qrBarCodeDTO.getId())) {
 			qrBarCodeVO = qrBarCodeRepo.findById(qrBarCodeDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid QrBarCode details"));
+			
+		   
 			qrBarCodeVO.setUpdatedBy(qrBarCodeDTO.getCreatedBy());
 			createUpdateQrBarCodeVOByQrBarCodeDTO(qrBarCodeDTO, qrBarCodeVO);
 
@@ -86,12 +89,14 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 
 	}
 
-	private void createUpdateQrBarCodeVOByQrBarCodeDTO(@Valid QrBarCodeDTO qrBarCodeDTO, QrBarCodeVO qrBarCodeVO) {
+	private void createUpdateQrBarCodeVOByQrBarCodeDTO(@Valid QrBarCodeDTO qrBarCodeDTO, QrBarCodeVO qrBarCodeVO) throws ApplicationException {
 
 		qrBarCodeVO.setDocDate(qrBarCodeDTO.getDocDate());
 		qrBarCodeVO.setDocId(qrBarCodeDTO.getDocId());
 		qrBarCodeVO.setDocDate(qrBarCodeDTO.getDocDate());
 		qrBarCodeVO.setEntryNo(qrBarCodeDTO.getEntryNo());
+		qrBarCodeVO.setCount(qrBarCodeDTO.getCount());
+
 
 
 		if (ObjectUtils.isNotEmpty(qrBarCodeVO.getId())) {
@@ -106,7 +111,6 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 			QrBarCodeDetailsVO qrBarCodeDetailsVO = new QrBarCodeDetailsVO();
 			qrBarCodeDetailsVO.setPartNo(qrBarCodeDetailsDTO.getPartNo());
 			qrBarCodeDetailsVO.setPartDescription(qrBarCodeDetailsDTO.getPartDescription());
-			qrBarCodeDetailsVO.setCount(qrBarCodeDetailsDTO.getCount());
 			qrBarCodeDetailsVO.setBarCodeValue(qrBarCodeDetailsDTO.getBarCodeValue());
 			qrBarCodeDetailsVO.setQrCodeValue(qrBarCodeDetailsDTO.getQrCodeValue());
 
@@ -180,11 +184,18 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 	                    System.out.println("Validating row: " + (row.getRowNum() + 1));
 	                    
 	                    try {
+	                
 	                        String entryno = getStringCellValue(row.getCell(0));
 	                        String partno = getStringCellValue(row.getCell(1));
 	                        String partdescription = getStringCellValue(row.getCell(2));
 	                       
 
+//	                        if (qrBarExcelUploadRepo.existsByEntryNoAndPartNo(entryno, partno)) {
+//	                            // If duplicate is found, throw an ApplicationException
+//	                            String errorMessage = String.format("This PartNo: %s already exists for EntryNo: %s.", partno, entryno);
+//	                            throw new ApplicationException(errorMessage);
+//	                        }else {
+	                        
 	                        // Create and populate SrsExcelUploadVO object
 	                        QrBarExcelUploadVO qrBarExcelUploadVO = new QrBarExcelUploadVO();
 	                        qrBarExcelUploadVO.setEntryNo(entryno);
@@ -200,9 +211,10 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 
 	                        qrBarExcelUploadVOsToSave.add(qrBarExcelUploadVO);
 	                        successfulUploads++;
+							
 	                    } catch (Exception e) {
-	                        // Optionally handle specific row processing exceptions here
-	                    }
+	                    	System.err.println("Application error at row " + (row.getRowNum() + 1) + ": " + e.getMessage());
+	                        throw e;	                    }
 	                }
 
 	                qrBarExcelUploadRepo.saveAll(qrBarExcelUploadVOsToSave);
@@ -278,7 +290,25 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 	    }
 
 	
+		@Override
+		@Transactional
+		public List<Map<String, Object>> getFillGridFromQrBarExcelUpload(String entryNo) {
 
+			Set<Object[]> result = qrBarCodeRepo.findFillGridFromQrBarExcelUpload(entryNo);
+			return getFillGridForQrBarCode(result);
+		}
+
+		private List<Map<String, Object>> getFillGridForQrBarCode(Set<Object[]> result) {
+			List<Map<String, Object>> details1 = new ArrayList<>();
+			for (Object[] fs : result) {
+				Map<String, Object> part = new HashMap<>();
+				part.put("partNo", fs[0] != null ? fs[0].toString() : "");
+				part.put("partDesc", fs[1] != null ? fs[1].toString() : "");
+				details1.add(part);
+			}
+			return details1;
+		}
+	
 
 
 }

@@ -44,6 +44,8 @@ public class QrBarCodeVO {
 	private LocalDate docDate;
 	@Column(name = "entryno")
 	private String entryNo;
+	@Column(name = "count")
+	private Long count;
 
 	@Column(name = "createdby")
 	private String createdBy;

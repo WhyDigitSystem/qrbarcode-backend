@@ -19,6 +19,7 @@ public class QrBarCodeDTO {
 	private String docId;
 	private LocalDate docDate;
 	private String entryNo;
+	private Long count;
 	private String createdBy;
 
 	private List<QrBarCodeDetailsDTO> qrBarCodeDetailsDTO;

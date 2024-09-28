@@ -8,4 +8,5 @@ import com.base.basesetup.entity.QrBarExcelUploadVO;
 @Repository
 public interface QrBarExcelUploadRepo extends JpaRepository<QrBarExcelUploadVO, Long> {
 
+
 }

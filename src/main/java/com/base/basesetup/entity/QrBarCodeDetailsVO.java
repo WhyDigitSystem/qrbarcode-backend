@@ -33,9 +33,6 @@ public class QrBarCodeDetailsVO {
 	private String partNo;
 	@Column(name = "partdescription")
 	private String partDescription;
-	@Column(name = "count")
-	private Long count;
-	
 	@Column(name = "barcodevalue")
 	private String barCodeValue;
 	@Column(name = "qrcodevalue")

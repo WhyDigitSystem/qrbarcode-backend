@@ -26,6 +26,8 @@ public interface QrBarCodeService {
 
 	void ExcelUploadForQrBarCode(MultipartFile[] files, CustomerAttachmentType type,String createdBy) throws ApplicationException;
 
+	List<Map<String, Object>> getFillGridFromQrBarExcelUpload(String entryNo);
+
 	
 	
 
