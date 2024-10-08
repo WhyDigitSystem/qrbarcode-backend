@@ -107,7 +107,7 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 		qrBarCodeVO.setDocDate(qrBarCodeDTO.getDocDate());
 		qrBarCodeVO.setEntryNo(qrBarCodeDTO.getEntryNo());
 		qrBarCodeVO.setCount(qrBarCodeDTO.getCount());
-		qrBarCodeVO.setOrgId(qrBarCodeDTO.getOrgId());
+		qrBarCodeVO.setOrgId(1000000001L);
 		qrBarCodeVO.setCancel(qrBarCodeDTO.isCancel());
 		qrBarCodeVO.setCancelRemarks(qrBarCodeDTO.getCancelRemarks());
 		qrBarCodeVO.setActive(qrBarCodeDTO.isActive());
@@ -387,7 +387,7 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 			
 			singleQrBarCodeVO.setQrBarCodeValue(singleQrBarCodeDTO.getQrBarCodeValue());
 			singleQrBarCodeVO.setCount(singleQrBarCodeDTO.getCount());
-			singleQrBarCodeVO.setOrgId(singleQrBarCodeDTO.getOrgId());
+			singleQrBarCodeVO.setOrgId(1000000001L);
 			singleQrBarCodeVO.setCancel(singleQrBarCodeDTO.isCancel());
 			singleQrBarCodeVO.setCancelRemarks(singleQrBarCodeDTO.getCancelRemarks());
 			singleQrBarCodeVO.setActive(singleQrBarCodeDTO.isActive());
