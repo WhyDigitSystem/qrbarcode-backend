@@ -28,6 +28,11 @@ public interface QrBarCodeRepo extends JpaRepository<QrBarCodeVO, Long>{
 	@Query(nativeQuery = true, value = "CALL next_qrbarcodedocid_value()")
 	void updatesequence();
 
+	@Query(nativeQuery = true, value = "SELECT CONCAT('QRBAR', CAST(SUBSTRING(docid, 6) AS UNSIGNED) + 1) AS nextdocid\r\n"
+			+ "FROM qrbarcode ORDER BY CAST(SUBSTRING(docid, 6) AS UNSIGNED) DESC\r\n"
+			+ "LIMIT 1")
+	String getQrBarCodeDocId();
+
 	
 	
 

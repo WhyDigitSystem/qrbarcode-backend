@@ -36,6 +36,8 @@ public interface QrBarCodeService {
 
 	Map<String, Object> createUpdateSingleQrBarCode(SingleQrBarCodeDTO singleQrBarCodeDTO) throws ApplicationException;
 
+	String getQrBarCodeDocId();
+
 	
 	
 

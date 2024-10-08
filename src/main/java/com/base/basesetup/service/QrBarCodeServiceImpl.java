@@ -392,9 +392,14 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 			singleQrBarCodeVO.setCancelRemarks(singleQrBarCodeDTO.getCancelRemarks());
 			singleQrBarCodeVO.setActive(singleQrBarCodeDTO.isActive());
 
-
 		}
-
+		
+		@Override
+		public String getQrBarCodeDocId() {
+		
+			String result = qrBarCodeRepo.getQrBarCodeDocId();
+			return result;
+		}
 
 
 }

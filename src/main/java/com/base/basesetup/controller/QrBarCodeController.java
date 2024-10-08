@@ -261,5 +261,35 @@ public class QrBarCodeController extends BaseController{
 	    return ResponseEntity.ok().body(responseDTO);
 	}
 	
+	@GetMapping("/getQrBarCodeDocId")
+	public ResponseEntity<ResponseDTO> getQrBarCodeDocId( ) {
+
+		String methodName = "getQrBarCodeDocId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		String mapp = "";
+
+		try {
+			mapp = qrBarCodeService.getQrBarCodeDocId();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"QrBarCode Docid information retrieved successfully");
+			responseObjectsMap.put("qrbarcodeDocId", mapp);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Failed to retrieve QrBarCode Docid information", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
 }
