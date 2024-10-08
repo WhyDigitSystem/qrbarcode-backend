@@ -23,7 +23,9 @@ import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.QrBarCodeDTO;
 import com.base.basesetup.dto.ResponseDTO;
+import com.base.basesetup.dto.SingleQrBarCodeDTO;
 import com.base.basesetup.entity.QrBarCodeVO;
+import com.base.basesetup.entity.SingleQrBarCodeVO;
 import com.base.basesetup.service.QrBarCodeService;
 
 @RestController
@@ -181,5 +183,83 @@ public class QrBarCodeController extends BaseController{
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
+	
+	//SingleQrBarCode
+	
+	@GetMapping("/getAllSingleQrBarCode")
+	public ResponseEntity<ResponseDTO> getAllSingleQrBarCode( ) {
+		String methodName = "getAllSingleQrBarCode()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<SingleQrBarCodeVO> singleQrBarCodeVO = new ArrayList<>();
+		try {
+			singleQrBarCodeVO = qrBarCodeService.getAllSingleQrBarCode( );
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "SingleQrBarCode information get successfully");
+			responseObjectsMap.put("SingleQrBarCodeVO", singleQrBarCodeVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "SingleQrBarCode information receive failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
+	
+	
+	@GetMapping("/getSingleQrBarCodeById")
+	public ResponseEntity<ResponseDTO> getSingleQrBarCodeById(@RequestParam(required = false) Long id) {
+        String methodName = "getSingleQrBarCodeById()";
+        LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+        String errorMsg = null;
+        Map<String, Object> responseObjectsMap = new HashMap<>();
+        ResponseDTO responseDTO = null;
+        SingleQrBarCodeVO singleQrBarCodeVO = new SingleQrBarCodeVO();
+
+        try {
+        	singleQrBarCodeVO = qrBarCodeService.getSingleQrBarCodeById(id);
+            if (singleQrBarCodeVO != null) {
+                responseObjectsMap.put("SingleQrBarCodeVO", singleQrBarCodeVO);
+                responseDTO = createServiceResponseMsg(responseObjectsMap, " SingleQrBarCode information retrieved successfully.");
+            } else {
+                responseDTO = createServiceResponseError(responseObjectsMap, " SingleQrBarCode information not found.", errorMsg);
+            }
+        } catch (Exception e) {
+            errorMsg = e.getMessage();
+            LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+            responseDTO = createServiceResponseError(responseObjectsMap, " SingleQrBarCode information retrieval failed.", errorMsg);
+        }
+
+        LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+        return ResponseEntity.ok().body(responseDTO);
+    }
+	
+	@PutMapping("/createUpdateSingleQrBarCode")
+	public ResponseEntity<ResponseDTO> createUpdateSingleQrBarCode(@RequestBody SingleQrBarCodeDTO singleQrBarCodeDTO) {
+	    String methodName = "createUpdateSingleQrBarCode()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO = null;
+	    try {
+	        Map<String, Object> singleQrBarCodeVO = qrBarCodeService.createUpdateSingleQrBarCode(singleQrBarCodeDTO);
+	        responseObjectsMap.put(CommonConstant.STRING_MESSAGE, singleQrBarCodeVO.get("message"));
+	        responseObjectsMap.put("singleQrBarCodeVO", singleQrBarCodeVO.get("singleQrBarCodeVO"));
+	        responseDTO = createServiceResponse(responseObjectsMap);
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+	    }
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
+	}
+	
 
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.base.basesetup.entity.QrBarCodeVO;
+import com.base.basesetup.entity.SingleQrBarCodeVO;
 
 @Repository
 public interface QrBarCodeRepo extends JpaRepository<QrBarCodeVO, Long>{
@@ -20,6 +21,15 @@ public interface QrBarCodeRepo extends JpaRepository<QrBarCodeVO, Long>{
 
 	@Query(nativeQuery = true, value = "SELECT partno, partdescription FROM qrbarexcelupload WHERE entryno = ?1 AND (entryno) NOT IN (SELECT entryno FROM qrbarcode) GROUP BY partno, partdescription")
 	Set<Object[]> findFillGridFromQrBarExcelUpload(String entryNo);
+
+	@Query(nativeQuery = true, value = "select sequence_value from qrbarcodedocidseq")
+	String finddocid();
+
+	@Query(nativeQuery = true, value = "CALL next_qrbarcodedocid_value()")
+	void updatesequence();
+
+	
+	
 
 
 }

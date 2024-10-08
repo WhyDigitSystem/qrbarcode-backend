@@ -32,13 +32,16 @@ import org.springframework.web.multipart.MultipartFile;
 import com.base.basesetup.controller.CustomerAttachmentType;
 import com.base.basesetup.dto.QrBarCodeDTO;
 import com.base.basesetup.dto.QrBarCodeDetailsDTO;
+import com.base.basesetup.dto.SingleQrBarCodeDTO;
 import com.base.basesetup.entity.QrBarCodeDetailsVO;
 import com.base.basesetup.entity.QrBarCodeVO;
 import com.base.basesetup.entity.QrBarExcelUploadVO;
+import com.base.basesetup.entity.SingleQrBarCodeVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.QrBarCodeDetailsRepo;
 import com.base.basesetup.repo.QrBarCodeRepo;
 import com.base.basesetup.repo.QrBarExcelUploadRepo;
+import com.base.basesetup.repo.SingleQrBarCodeRepo;
 
 
 @Service
@@ -55,6 +58,9 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 
 	@Autowired
 	QrBarExcelUploadRepo qrBarExcelUploadRepo;
+	
+	@Autowired
+	SingleQrBarCodeRepo singleQrBarCodeRepo;
 	
 	@Override
 	public Map<String, Object> createUpdateQrBarCode(QrBarCodeDTO qrBarCodeDTO) throws ApplicationException {
@@ -74,6 +80,11 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 		} else {
 
 			createUpdateQrBarCodeVOByQrBarCodeDTO(qrBarCodeDTO, qrBarCodeVO);
+			
+			String requestnumber = "QRBAR" + qrBarCodeRepo.finddocid();
+			qrBarCodeVO.setDocId(requestnumber);
+			qrBarCodeRepo.updatesequence();
+			
 			qrBarCodeVO.setUpdatedBy(qrBarCodeDTO.getCreatedBy());
 			qrBarCodeVO.setCreatedBy(qrBarCodeDTO.getCreatedBy());
 			message = "QrBarCode created Successfully";
@@ -96,6 +107,12 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 		qrBarCodeVO.setDocDate(qrBarCodeDTO.getDocDate());
 		qrBarCodeVO.setEntryNo(qrBarCodeDTO.getEntryNo());
 		qrBarCodeVO.setCount(qrBarCodeDTO.getCount());
+		qrBarCodeVO.setOrgId(qrBarCodeDTO.getOrgId());
+		qrBarCodeVO.setCancel(qrBarCodeDTO.isCancel());
+		qrBarCodeVO.setCancelRemarks(qrBarCodeDTO.getCancelRemarks());
+		qrBarCodeVO.setActive(qrBarCodeDTO.isActive());
+
+
 
 
 
@@ -309,6 +326,75 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 			return details1;
 		}
 	
+		
+		//SingleQrBarCode
+		
+		@Override
+		public List<SingleQrBarCodeVO> getAllSingleQrBarCode( ) {
+			return singleQrBarCodeRepo.findAllSingleQrBarCode();
+
+		}
+
+		@Override
+		public SingleQrBarCodeVO getSingleQrBarCodeById(Long id) {
+			SingleQrBarCodeVO singleQrBarCodeVO = new SingleQrBarCodeVO();
+			if (ObjectUtils.isNotEmpty(id)) {
+				LOGGER.info("Successfully Received  SingleQrBarCode BY Id : {}", id);
+				singleQrBarCodeVO = singleQrBarCodeRepo.findSingleQrBarCodeById(id);
+			} else {
+				LOGGER.info("failed Received  SingleQrBarCode For All Id.");
+			}
+			return singleQrBarCodeVO;
+
+		}
+
+		@Override
+		public Map<String, Object> createUpdateSingleQrBarCode(SingleQrBarCodeDTO singleQrBarCodeDTO) throws ApplicationException {
+			SingleQrBarCodeVO singleQrBarCodeVO = new SingleQrBarCodeVO();
+			String message;
+
+			if (ObjectUtils.isNotEmpty(singleQrBarCodeDTO.getId())) {
+				singleQrBarCodeVO = singleQrBarCodeRepo.findById(singleQrBarCodeDTO.getId())
+						.orElseThrow(() -> new ApplicationException("Invalid QrBarCode details"));
+				
+			   
+				singleQrBarCodeVO.setUpdatedBy(singleQrBarCodeDTO.getCreatedBy());
+				createUpdateSingleQrBarCodeVOBySingleQrBarCodeDTO(singleQrBarCodeDTO, singleQrBarCodeVO);
+
+				message = "SingleQrBarCode updated Successfully";
+
+			} else {
+
+				createUpdateSingleQrBarCodeVOBySingleQrBarCodeDTO(singleQrBarCodeDTO, singleQrBarCodeVO);
+				
+				singleQrBarCodeVO.setUpdatedBy(singleQrBarCodeDTO.getCreatedBy());
+				singleQrBarCodeVO.setCreatedBy(singleQrBarCodeDTO.getCreatedBy());
+				message = "SingleQrBarCode created Successfully";
+
+			}
+
+			SingleQrBarCodeVO savedQrBarCodeVO = singleQrBarCodeRepo.save(singleQrBarCodeVO);
+
+			Map<String, Object> response = new HashMap<>();
+			response.put("singleQrBarCodeVO", singleQrBarCodeVO);
+			response.put("message", message);
+			return response;
+
+		}
+
+		private void createUpdateSingleQrBarCodeVOBySingleQrBarCodeDTO(@Valid SingleQrBarCodeDTO singleQrBarCodeDTO, SingleQrBarCodeVO singleQrBarCodeVO) throws ApplicationException {
+
+			
+			singleQrBarCodeVO.setQrBarCodeValue(singleQrBarCodeDTO.getQrBarCodeValue());
+			singleQrBarCodeVO.setCount(singleQrBarCodeDTO.getCount());
+			singleQrBarCodeVO.setOrgId(singleQrBarCodeDTO.getOrgId());
+			singleQrBarCodeVO.setCancel(singleQrBarCodeDTO.isCancel());
+			singleQrBarCodeVO.setCancelRemarks(singleQrBarCodeDTO.getCancelRemarks());
+			singleQrBarCodeVO.setActive(singleQrBarCodeDTO.isActive());
+
+
+		}
+
 
 
 }
