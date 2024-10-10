@@ -33,10 +33,13 @@ public class QrBarCodeDetailsVO {
 	private String partNo;
 	@Column(name = "partdescription")
 	private String partDescription;
+	@Column(name = "batchno")
+	private String batchNo;
 	@Column(name = "barcodevalue")
 	private String barCodeValue;
 	@Column(name = "qrcodevalue")
 	private String qrCodeValue;
+	
 	
 	
 	@JsonBackReference

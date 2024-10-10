@@ -32,6 +32,8 @@ public class QrBarExcelUploadVO {
 	private String partNo;
 	@Column(name = "partdescription")
 	private String partDescription;
+	@Column(name = "batchno")
+	private String batchNo;
 	
 	@Column(name = "createdby")
 	private String createdBy;

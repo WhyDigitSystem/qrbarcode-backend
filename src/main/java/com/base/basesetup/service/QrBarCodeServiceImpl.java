@@ -128,6 +128,7 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 			QrBarCodeDetailsVO qrBarCodeDetailsVO = new QrBarCodeDetailsVO();
 			qrBarCodeDetailsVO.setPartNo(qrBarCodeDetailsDTO.getPartNo());
 			qrBarCodeDetailsVO.setPartDescription(qrBarCodeDetailsDTO.getPartDescription());
+			qrBarCodeDetailsVO.setBatchNo(qrBarCodeDetailsDTO.getBatchNo());
 			qrBarCodeDetailsVO.setBarCodeValue(qrBarCodeDetailsDTO.getBarCodeValue());
 			qrBarCodeDetailsVO.setQrCodeValue(qrBarCodeDetailsDTO.getQrCodeValue());
 
@@ -205,6 +206,8 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 	                        String entryno = getStringCellValue(row.getCell(0));
 	                        String partno = getStringCellValue(row.getCell(1));
 	                        String partdescription = getStringCellValue(row.getCell(2));
+	                        String batchno = getStringCellValue(row.getCell(3));
+
 	                       
 
 //	                        if (qrBarExcelUploadRepo.existsByEntryNoAndPartNo(entryno, partno)) {
@@ -218,6 +221,8 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 	                        qrBarExcelUploadVO.setEntryNo(entryno);
 	                        qrBarExcelUploadVO.setPartNo(partno);
 	                        qrBarExcelUploadVO.setPartDescription(partdescription);
+	                        qrBarExcelUploadVO.setBatchNo(batchno);
+
 	                       
 	                      
 	                        qrBarExcelUploadVO.setCreatedBy(createdBy);
@@ -282,7 +287,7 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 	            return false;
 	        }
 	        List<String> expectedHeaders = Arrays.asList(
-	            "entryno", "partno", "partdescription"
+	            "entryno", "partno", "partdescription","batchno"
 	        );
 
 	        List<String> actualHeaders = new ArrayList<>();
@@ -321,6 +326,8 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 				Map<String, Object> part = new HashMap<>();
 				part.put("partNo", fs[0] != null ? fs[0].toString() : "");
 				part.put("partDesc", fs[1] != null ? fs[1].toString() : "");
+				part.put("batchNo", fs[2] != null ? fs[2].toString() : "");
+
 				details1.add(part);
 			}
 			return details1;
@@ -397,8 +404,11 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 		@Override
 		public String getQrBarCodeDocId() {
 		
-			String result = qrBarCodeRepo.getQrBarCodeDocId();
-			return result;
+			String prefix="QRBAR";
+			int result = qrBarCodeRepo.getQrBarCodeDocId();
+			
+			String docid = prefix + result;
+			return docid;
 		}
 
 
