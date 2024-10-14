@@ -327,6 +327,8 @@ public class QrBarCodeServiceImpl implements QrBarCodeService {
 				part.put("partNo", fs[0] != null ? fs[0].toString() : "");
 				part.put("partDesc", fs[1] != null ? fs[1].toString() : "");
 				part.put("batchNo", fs[2] != null ? fs[2].toString() : "");
+				part.put("id",fs[3]!=null ? Integer.parseInt(fs[3].toString()):0);
+
 
 				details1.add(part);
 			}

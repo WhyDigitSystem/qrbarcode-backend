@@ -19,7 +19,7 @@ public interface QrBarCodeRepo extends JpaRepository<QrBarCodeVO, Long>{
 	@Query(nativeQuery = true, value = "select * from qrbarcode where qrbarcodeid=?1")
 	QrBarCodeVO findQrBarCodeById(Long id);
 
-	@Query(nativeQuery = true, value = "SELECT partno, partdescription,batchno FROM qrbarexcelupload WHERE entryno = ?1 AND (entryno) NOT IN (SELECT entryno FROM qrbarcode) GROUP BY partno, partdescription,batchno")
+	@Query(nativeQuery = true, value = "SELECT partno, partdescription,batchno,ROW_NUMBER() OVER (ORDER BY partdescription, partno) AS id FROM qrbarexcelupload WHERE entryno = ?1 AND (entryno) NOT IN (SELECT entryno FROM qrbarcode) GROUP BY partno, partdescription,batchno")
 	Set<Object[]> findFillGridFromQrBarExcelUpload(String entryNo);
 
 	@Query(nativeQuery = true, value = "select sequence_value from qrbarcodedocidseq")
