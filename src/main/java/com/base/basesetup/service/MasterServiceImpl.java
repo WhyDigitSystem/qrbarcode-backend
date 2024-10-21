@@ -1,5 +1,6 @@
 package com.base.basesetup.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.dto.TaxInvoiceProductLineDTO;
@@ -66,7 +68,7 @@ public class MasterServiceImpl implements MasterService{
 
 				taxInvoiceVO.setProductLines(taxInvoiceProductLineVOs);
 				taxInvoiceVO.setCreatedBy(taxInvoiceDTO.getCreatedBy());
-				taxInvoiceVO.setModifiedBy(taxInvoiceDTO.getCreatedBy());
+				taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
 
 
 
@@ -104,7 +106,7 @@ public class MasterServiceImpl implements MasterService{
 
 			
 
-				taxInvoiceVO.setModifiedBy(taxInvoiceDTO.getCreatedBy());
+				taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
 				taxInvoiceVO.setProductLines(taxInvoiceProductLineVOs);
 				mapTaxInvoiceDTOToTaxInvoiceVO(taxInvoiceDTO, taxInvoiceVO);
 
@@ -143,7 +145,10 @@ public class MasterServiceImpl implements MasterService{
 			taxInvoiceVO.setAccountNo(taxInvoiceDTO.getAccountNo());
 			taxInvoiceVO.setIfsc(taxInvoiceDTO.getIfsc());
 			taxInvoiceVO.setNotes(taxInvoiceDTO.getNotes());
+			taxInvoiceVO.setTaxInvoiceimage(taxInvoiceDTO.getTaxInvoiceimage());
 			taxInvoiceVO.setOrgId(taxInvoiceDTO.getOrgId());
+			taxInvoiceVO.setTax(taxInvoiceDTO.getTax());
+
 		}
 
 		@Override
@@ -161,4 +166,37 @@ public class MasterServiceImpl implements MasterService{
 		public List<TaxInvoiceVO> getAllTaxInvoice( ) {
 			return taxInvoiceRepo.findAll();
 		}
+		
+		 @Override
+		    public TaxInvoiceVO uploadImageForTaxInvoice(MultipartFile file, Long id) throws IOException {
+		        LOGGER.debug("Uploading Taxinvoice image for id: {}", id);
+		        TaxInvoiceVO taxInvoiceVO = taxInvoiceRepo.findById(id).orElseThrow(() -> {
+		            LOGGER.error("Taxinvoice not found for id: {}", id);
+		            return new RuntimeException("Taxinvoice not found");
+		        });
+		        taxInvoiceVO.setTaxInvoiceimage(file.getBytes());
+		        LOGGER.debug("Taxinvoice image uploaded successfully for id: {}", id);
+		        return taxInvoiceRepo.save(taxInvoiceVO);
+		    }
+	
+		 
+		  @Override
+		    public byte[] getTaxInvoiceImageById(Long id) {
+		        LOGGER.debug("Retrieving TaxInvoice image for id: {}", id);
+
+		        TaxInvoiceVO taxInvoiceVO = taxInvoiceRepo.findById(id).orElseThrow(() -> {
+		            LOGGER.error("TaxInvoice not found for id: {}", id);
+		            return new RuntimeException("TaxInvoice not found");
+		        });
+
+		        byte[] image = taxInvoiceVO.getTaxInvoiceimage();
+
+		        if (image == null || image.length == 0) {
+		            LOGGER.error("No image data found for TaxInvoice with id: {}", id);
+		        } else {
+		            LOGGER.debug("TaxInvoice image retrieved successfully for id: {}", id);
+		        }
+
+		        return image;
+		    }
 }

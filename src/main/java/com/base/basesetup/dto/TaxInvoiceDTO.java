@@ -18,6 +18,7 @@ public class TaxInvoiceDTO {
 	private String term;
 	private String dueDate;
 	private String serviceMonth;
+	private int tax;
 	private String billToAddress;
 	private String shipToAddress;
 	private String gstType;
@@ -35,6 +36,8 @@ public class TaxInvoiceDTO {
 	private String createdBy;
 	private String modifiedBy;
 	private Long orgId;
+	private byte[] taxInvoiceimage;
+
 
 	private List<TaxInvoiceProductLineDTO> productLines;
 

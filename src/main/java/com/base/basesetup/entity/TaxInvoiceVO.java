@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -87,6 +88,9 @@ public class TaxInvoiceVO {
 	@Column(name = "accountno", columnDefinition = "TEXT")
 	private String accountNo;
 
+	@Column(name = "tax")
+	private int tax;
+
 	@Column(name = "ifsc", columnDefinition = "TEXT")
 	private String Ifsc;
 
@@ -97,18 +101,20 @@ public class TaxInvoiceVO {
 	private String createdBy;
 
 	@Column(name = "modifiedby", columnDefinition = "TEXT")
-	private String modifiedBy;
+	private String updatedBy;
 
 	@Column(name = "orgid")
 	private Long orgId;
 
-	private boolean cancel = false;// po->inov,// taxinvoi-invoice
+	private boolean cancel = false;
+
+	@Lob
+	@Column(name = "data", nullable = false)
+	private byte[] taxInvoiceimage;
 
 	@OneToMany(mappedBy = "taxInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<TaxInvoiceProductLineVO> productLines;
-
-
 
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
