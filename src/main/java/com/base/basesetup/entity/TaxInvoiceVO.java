@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -32,31 +33,30 @@ public class TaxInvoiceVO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "taxinvoicegen")
 	@SequenceGenerator(name = "taxinvoicegen", sequenceName = "taxinvoiceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "taxinvoiceid")
+	
 	private Long id;
-
-	@Column(name = "companyaddress", columnDefinition = "TEXT")
-	private String companyAddress;
 
 	@Column(name = "invoiceno", columnDefinition = "TEXT")
 	private String invoiceNo;
 
 	@Column(name = "invoicedate", columnDefinition = "TEXT")
-	private String invoiceDate;
+	
+	private LocalDate invoiceDate;
 
 	@Column(name = "term", length = 1000, columnDefinition = "TEXT")
 	private String term;
 
 	@Column(name = "duedate", columnDefinition = "TEXT")
-	private String dueDate;
+	private LocalDate dueDate;
 
 	@Column(name = "servicemonth", columnDefinition = "TEXT")
 	private String serviceMonth;
 
-	@Column(name = "billtoaddress", columnDefinition = "TEXT")
-	private String billToAddress;
+	@Column(name = "customer", columnDefinition = "TEXT")
+	private String customer;
 
-	@Column(name = "shiptoaddress", columnDefinition = "TEXT")
-	private String shipToAddress;
+	@Column(name = "address", columnDefinition = "TEXT")
+	private String address;
 
 	@Column(name = "gsttype", columnDefinition = "TEXT")
 	private String gstType;
@@ -67,6 +67,8 @@ public class TaxInvoiceVO {
 	@Column(name = "cgst", columnDefinition = "TEXT")
 	private Integer cgst;
 
+	   
+	
 	@Column(name = "igst", columnDefinition = "TEXT")
 	private Integer igst;
 
@@ -84,6 +86,7 @@ public class TaxInvoiceVO {
 
 	@Column(name = "accountname", columnDefinition = "TEXT")
 	private String accountName;
+	
 
 	@Column(name = "accountno", columnDefinition = "TEXT")
 	private String accountNo;

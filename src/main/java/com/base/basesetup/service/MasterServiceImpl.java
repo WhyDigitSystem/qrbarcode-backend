@@ -125,14 +125,13 @@ public class MasterServiceImpl implements MasterService{
 		}
 
 		private void mapTaxInvoiceDTOToTaxInvoiceVO(TaxInvoiceDTO taxInvoiceDTO, TaxInvoiceVO taxInvoiceVO) {
-			taxInvoiceVO.setCompanyAddress(taxInvoiceDTO.getCompanyAddress());
 			taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
 			taxInvoiceVO.setInvoiceDate(taxInvoiceDTO.getInvoiceDate());
 			taxInvoiceVO.setTerm(taxInvoiceDTO.getTerm());
 			taxInvoiceVO.setDueDate(taxInvoiceDTO.getDueDate());
 			taxInvoiceVO.setServiceMonth(taxInvoiceDTO.getServiceMonth());
-			taxInvoiceVO.setBillToAddress(taxInvoiceDTO.getBillToAddress());
-			taxInvoiceVO.setShipToAddress(taxInvoiceDTO.getShipToAddress());
+			taxInvoiceVO.setCustomer(taxInvoiceDTO.getCustomer());
+			taxInvoiceVO.setAddress(taxInvoiceDTO.getAddress());
 			taxInvoiceVO.setGstType(taxInvoiceDTO.getGstType());
 			taxInvoiceVO.setSgst(taxInvoiceDTO.getSgst());
 			taxInvoiceVO.setCgst(taxInvoiceDTO.getCgst());

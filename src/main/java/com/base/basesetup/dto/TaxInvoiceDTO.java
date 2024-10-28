@@ -1,5 +1,6 @@
 package com.base.basesetup.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -12,15 +13,14 @@ import lombok.NoArgsConstructor;
 public class TaxInvoiceDTO {
 
 	private Long id;
-	private String companyAddress;
 	private String invoiceNo;
-	private String invoiceDate;
+	private LocalDate invoiceDate;
 	private String term;
-	private String dueDate;
+	private LocalDate dueDate;
 	private String serviceMonth;
 	private int tax;
-	private String billToAddress;
-	private String shipToAddress;
+	private String customer;
+	private String address;
 	private String gstType;
 	private Integer sgst;
 	private Integer cgst;
