@@ -32,9 +32,9 @@ public class TaxInvoiceProductLineVO {
 	@Column(name="description")
 	private String description;
 	@Column(name="quantity")
-	private String quantity;
+	private int quantity;
 	@Column(name="rate")
-	private String rate;
+	private int rate;
 	@Column(name="amount")
 	private Long amount; 
 	

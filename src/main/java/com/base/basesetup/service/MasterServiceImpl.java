@@ -1,6 +1,7 @@
 package com.base.basesetup.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,180 +23,283 @@ import com.base.basesetup.repo.TaxInvoiceProductLineRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
 
 @Service
-public class MasterServiceImpl implements MasterService{
-
+public class MasterServiceImpl implements MasterService {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MasterServiceImpl.class);
 
 	private static final String STRING = null;
 
 	private static final String NUMERIC = null;
-	
+
 	@Autowired
 	TaxInvoiceRepo taxInvoiceRepo;
 
 	@Autowired
 	TaxInvoiceProductLineRepo taxInvoiceProductLineRepo;
-	
-	
+
 	// TaxInvoice
-		@Override
-		public Map<String, Object> createUpdateTaxInvoice(TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException {
-			TaxInvoiceVO taxInvoiceVO = new TaxInvoiceVO();
-			String message;
+//		@Override
+//		public Map<String, Object> createUpdateTaxInvoice(TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException {
+//			TaxInvoiceVO taxInvoiceVO = new TaxInvoiceVO();
+//			String message;
+//
+//			if (ObjectUtils.isEmpty(taxInvoiceDTO.getId())) {
+//				
+//				if (taxInvoiceRepo.existsByOrgIdAndInvoiceNo(taxInvoiceDTO.getOrgId(), taxInvoiceDTO.getInvoiceNo())) {
+//					throw new ApplicationException("InvoiceNo already Exists");
+//				}
+//				taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
+//
+//				taxInvoiceVO.setCreatedBy(taxInvoiceDTO.getCreatedBy());
+//				taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
+//
+//				mapTaxInvoiceDTOToTaxInvoiceVO(taxInvoiceDTO, taxInvoiceVO);
+//				message = "Tax Invoice Created successfully";
+//			} else {
+//				taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId()).get();
+//
+//				if (!taxInvoiceVO.getInvoiceNo().equals(taxInvoiceDTO.getInvoiceNo())) {
+//					if (taxInvoiceRepo.existsByOrgIdAndInvoiceNo(taxInvoiceDTO.getOrgId(), taxInvoiceDTO.getInvoiceNo())) {
+//						throw new ApplicationException("InvoiceNo already Exists");
+//					}
+//					taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
+//				}
+//
+//				taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
+//				mapTaxInvoiceDTOToTaxInvoiceVO(taxInvoiceDTO, taxInvoiceVO);
+//
+//
+//				message = "Tax Invoice Updated successfully";
+//			}
+//			
+//			String invoiceno = taxInvoiceDTO.getInvoiceNo();
+//			if (invoiceno == null) {
+//				throw new ApplicationException("Field cannot be Empty");
+//			}
+//			
+//			
+//			
+//			
+//			
+//			
+//			taxInvoiceRepo.save(taxInvoiceVO);
+//			Map<String, Object> response = new HashMap<>();
+//			response.put("taxInvoiceVO", taxInvoiceVO);
+//			response.put("message", message);
+//			return response;
+//		}
+//
+//		private void mapTaxInvoiceDTOToTaxInvoiceVO(TaxInvoiceDTO taxInvoiceDTO, TaxInvoiceVO taxInvoiceVO) {
+//			
+//			int quantity = 0;
+//			int rate = 0;
+//			long amount = 0;
+//			long totalAmount=0;
+//			List<TaxInvoiceProductLineVO> existingProductLines = taxInvoiceProductLineRepo
+//					.findByTaxInvoiceVO(taxInvoiceVO);
+//			taxInvoiceProductLineRepo.deleteAll(existingProductLines);
+//
+//			List<TaxInvoiceProductLineVO> taxInvoiceProductLineVOs = new ArrayList<>();
+//
+//				for (TaxInvoiceProductLineDTO productLineDTO : taxInvoiceDTO.getProductLines()) {
+//					TaxInvoiceProductLineVO productLineVO = new TaxInvoiceProductLineVO();
+//					productLineVO.setDescription(productLineDTO.getDescription());
+//					productLineVO.setQuantity(productLineDTO.getQuantity());
+//					productLineVO.setRate(productLineDTO.getRate());
+//					
+//					 quantity = productLineDTO.getQuantity();
+//					 rate = productLineDTO.getRate();
+//
+//					// Multiply quantity and rate (both int) and cast to long for amount
+//					 amount = (long) quantity * rate;
+//					// Set the amount as long
+//					productLineVO.setAmount(amount);
+//					totalAmount = totalAmount + (productLineVO.getAmount());
+//					productLineVO.setTaxInvoiceVO(taxInvoiceVO);
+//					taxInvoiceProductLineVOs.add(productLineVO);
+//				}
+//				taxInvoiceVO.setProductLines(taxInvoiceProductLineVOs);
+//			
+//			
+//			taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
+//			taxInvoiceVO.setInvoiceDate(taxInvoiceDTO.getInvoiceDate());
+//			taxInvoiceVO.setTerm(taxInvoiceDTO.getTerm());
+//			taxInvoiceVO.setDueDate(taxInvoiceDTO.getDueDate());
+//			taxInvoiceVO.setServiceMonth(taxInvoiceDTO.getServiceMonth());
+//			taxInvoiceVO.setCustomer(taxInvoiceDTO.getCustomer());
+//			taxInvoiceVO.setAddress(taxInvoiceDTO.getAddress());
+//			taxInvoiceVO.setGstType(taxInvoiceDTO.getGstType());
+//			taxInvoiceVO.setSgst(taxInvoiceDTO.getSgst());
+//			taxInvoiceVO.setCgst(taxInvoiceDTO.getCgst());
+//			taxInvoiceVO.setIgst(taxInvoiceDTO.getIgst());
+//			long percentage = taxInvoiceDTO.getCgst() + taxInvoiceDTO.getSgst() / 100 *totalAmount;
+//			taxInvoiceVO.setTotal(percentage);
+//			taxInvoiceVO.setSubTotal(totalAmount);
+//			taxInvoiceVO.setTermsAndConditions(taxInvoiceDTO.getTermsAndConditions());
+//			taxInvoiceVO.setBankName(taxInvoiceDTO.getBankName());
+//			taxInvoiceVO.setAccountName(taxInvoiceDTO.getAccountName());
+//			taxInvoiceVO.setAccountNo(taxInvoiceDTO.getAccountNo());
+//			taxInvoiceVO.setIfsc(taxInvoiceDTO.getIfsc());
+//			taxInvoiceVO.setNotes(taxInvoiceDTO.getNotes());
+//			taxInvoiceVO.setTaxInvoiceimage(taxInvoiceDTO.getTaxInvoiceimage());
+//			taxInvoiceVO.setOrgId(taxInvoiceDTO.getOrgId());
+//			taxInvoiceVO.setTax(taxInvoiceDTO.getTax());
+//				
+//			}
 
-			if (ObjectUtils.isEmpty(taxInvoiceDTO.getId())) {
-				List<TaxInvoiceProductLineVO> taxInvoiceProductLineVOs = new ArrayList<>();
+	@Override
+	public Map<String, Object> createUpdateTaxInvoice(TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException {
+		TaxInvoiceVO taxInvoiceVO;
+		String message;
 
-				if (taxInvoiceDTO.getProductLines() != null) {
-					for (TaxInvoiceProductLineDTO productLineDTO : taxInvoiceDTO.getProductLines()) {
-						TaxInvoiceProductLineVO productLineVO = new TaxInvoiceProductLineVO();
-						productLineVO.setDescription(productLineDTO.getDescription());
-						productLineVO.setQuantity(productLineDTO.getQuantity());
-						productLineVO.setRate(productLineDTO.getRate());
-						productLineVO.setAmount(productLineDTO.getAmount());
-						productLineVO.setTaxInvoiceVO(taxInvoiceVO);
-						taxInvoiceProductLineVOs.add(productLineVO);
-					}
-				}
+		// Check if it's a new invoice or an update
+		if (ObjectUtils.isEmpty(taxInvoiceDTO.getId())) {
+//			if (taxInvoiceRepo.existsByOrgIdAndInvoiceNo(taxInvoiceDTO.getOrgId(), taxInvoiceDTO.getInvoiceNo())) {
+//				throw new ApplicationException("InvoiceNo already exists");
+//			}
 
-				
+			taxInvoiceVO = new TaxInvoiceVO();
+			taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
+			taxInvoiceVO.setCreatedBy(taxInvoiceDTO.getCreatedBy());
+			taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
 
-				if (taxInvoiceRepo.existsByOrgIdAndInvoiceNo(taxInvoiceDTO.getOrgId(), taxInvoiceDTO.getInvoiceNo())) {
-					throw new ApplicationException("InvoiceNo already Exists");
-				}
-				taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
+			message = "Tax Invoice created successfully";
+		} else {
+			// Find the existing TaxInvoiceVO for update
+			taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invoice not found"));
 
-				taxInvoiceVO.setProductLines(taxInvoiceProductLineVOs);
-				taxInvoiceVO.setCreatedBy(taxInvoiceDTO.getCreatedBy());
-				taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
+			// Check if the invoice number is changing and if the new one already exists
+//			if (!taxInvoiceVO.getInvoiceNo().equals(taxInvoiceDTO.getInvoiceNo()) && taxInvoiceRepo
+//					.existsByOrgIdAndInvoiceNo(taxInvoiceDTO.getOrgId(), taxInvoiceDTO.getInvoiceNo())) {
+//				throw new ApplicationException("InvoiceNo already exists");
+//			}
 
-
-
-				mapTaxInvoiceDTOToTaxInvoiceVO(taxInvoiceDTO, taxInvoiceVO);
-				message = "Tax Invoice Created successfully";
-			} else {
-				taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId()).get();
-
-				if (!taxInvoiceVO.getInvoiceNo().equals(taxInvoiceDTO.getInvoiceNo())) {
-					if (taxInvoiceRepo.existsByOrgIdAndInvoiceNo(taxInvoiceDTO.getOrgId(), taxInvoiceDTO.getInvoiceNo())) {
-						throw new ApplicationException("InvoiceNo already Exists");
-					}
-					taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
-				}
-
-				List<TaxInvoiceProductLineVO> existingProductLines = taxInvoiceProductLineRepo
-						.findByTaxInvoiceVO(taxInvoiceVO);
-				taxInvoiceProductLineRepo.deleteAll(existingProductLines);
-
-
-
-				List<TaxInvoiceProductLineVO> taxInvoiceProductLineVOs = new ArrayList<>();
-
-				if (taxInvoiceDTO.getProductLines() != null) {
-					for (TaxInvoiceProductLineDTO productLineDTO : taxInvoiceDTO.getProductLines()) {
-						TaxInvoiceProductLineVO productLineVO = new TaxInvoiceProductLineVO();
-						productLineVO.setDescription(productLineDTO.getDescription());
-						productLineVO.setQuantity(productLineDTO.getQuantity());
-						productLineVO.setRate(productLineDTO.getRate());
-						productLineVO.setAmount(productLineDTO.getAmount());
-						productLineVO.setTaxInvoiceVO(taxInvoiceVO);
-						taxInvoiceProductLineVOs.add(productLineVO);
-					}
-				}
-
-			
-
-				taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
-				taxInvoiceVO.setProductLines(taxInvoiceProductLineVOs);
-				mapTaxInvoiceDTOToTaxInvoiceVO(taxInvoiceDTO, taxInvoiceVO);
-
-
-				message = "Tax Invoice Updated successfully";
-			}
-			String invoiceno = taxInvoiceDTO.getInvoiceNo();
-			if (invoiceno == null) {
-				throw new ApplicationException("Field cannot be Empty");
-			}
-			taxInvoiceRepo.save(taxInvoiceVO);
-			Map<String, Object> response = new HashMap<>();
-			response.put("taxInvoiceVO", taxInvoiceVO);
-			response.put("message", message);
-			return response;
+			taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
+			taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
+			message = "Tax Invoice updated successfully";
 		}
 
-		private void mapTaxInvoiceDTOToTaxInvoiceVO(TaxInvoiceDTO taxInvoiceDTO, TaxInvoiceVO taxInvoiceVO) {
-			taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
-			taxInvoiceVO.setInvoiceDate(taxInvoiceDTO.getInvoiceDate());
-			taxInvoiceVO.setTerm(taxInvoiceDTO.getTerm());
-			taxInvoiceVO.setDueDate(taxInvoiceDTO.getDueDate());
-			taxInvoiceVO.setServiceMonth(taxInvoiceDTO.getServiceMonth());
-			taxInvoiceVO.setCustomer(taxInvoiceDTO.getCustomer());
-			taxInvoiceVO.setAddress(taxInvoiceDTO.getAddress());
-			taxInvoiceVO.setGstType(taxInvoiceDTO.getGstType());
-			taxInvoiceVO.setSgst(taxInvoiceDTO.getSgst());
-			taxInvoiceVO.setCgst(taxInvoiceDTO.getCgst());
+		// First, save the taxInvoiceVO to generate ID if it's a new entity
+		mapTaxInvoiceDTOToTaxInvoiceVO(taxInvoiceDTO, taxInvoiceVO);
+		taxInvoiceVO = taxInvoiceRepo.save(taxInvoiceVO);
+
+		// Delete any existing product lines and save the new ones
+		List<TaxInvoiceProductLineVO> existingProductLines = taxInvoiceProductLineRepo.findByTaxInvoiceVO(taxInvoiceVO);
+		taxInvoiceProductLineRepo.deleteAll(existingProductLines);
+
+		List<TaxInvoiceProductLineVO> taxInvoiceProductLineVOs = new ArrayList<>();
+		for (TaxInvoiceProductLineDTO productLineDTO : taxInvoiceDTO.getProductLines()) {
+			TaxInvoiceProductLineVO productLineVO = new TaxInvoiceProductLineVO();
+			productLineVO.setDescription(productLineDTO.getDescription());
+			productLineVO.setQuantity(productLineDTO.getQuantity());
+			productLineVO.setRate(productLineDTO.getRate());
+			productLineVO.setAmount((long) productLineDTO.getQuantity() * productLineDTO.getRate()); // Calculate amount
+			productLineVO.setTaxInvoiceVO(taxInvoiceVO); // Set the parent TaxInvoiceVO reference
+			taxInvoiceProductLineVOs.add(productLineVO);
+		}
+		taxInvoiceProductLineRepo.saveAll(taxInvoiceProductLineVOs); // Save all new product lines
+
+		taxInvoiceVO.setProductLines(taxInvoiceProductLineVOs); // Set the saved product lines if needed
+
+		Map<String, Object> response = new HashMap<>();
+		response.put("taxInvoiceVO", taxInvoiceVO);
+		response.put("message", message);
+		return response;
+	}
+
+	private void mapTaxInvoiceDTOToTaxInvoiceVO(TaxInvoiceDTO taxInvoiceDTO, TaxInvoiceVO taxInvoiceVO) {
+		taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
+		taxInvoiceVO.setInvoiceDate(taxInvoiceDTO.getInvoiceDate());
+		taxInvoiceVO.setTerm(taxInvoiceDTO.getTerm());
+		taxInvoiceVO.setDueDate(taxInvoiceDTO.getDueDate());
+		taxInvoiceVO.setServiceMonth(taxInvoiceDTO.getServiceMonth());
+		taxInvoiceVO.setCustomer(taxInvoiceDTO.getCustomer());
+		taxInvoiceVO.setAddress(taxInvoiceDTO.getAddress());
+		taxInvoiceVO.setGstType(taxInvoiceDTO.getGstType());
+		
+
+		// Calculate total amount including tax
+		long totalAmount = taxInvoiceDTO.getProductLines().stream()
+				.mapToLong(line -> (long) line.getQuantity() * line.getRate()).sum();
+
+		if(taxInvoiceDTO.getCgst()!=0 && taxInvoiceDTO.getSgst()!=0) {
+		// Apply tax to calculate the total
+		long taxAmount = (taxInvoiceDTO.getCgst() + taxInvoiceDTO.getSgst()) * totalAmount / 100;
+		taxInvoiceVO.setTotal(totalAmount + taxAmount);
+		
+		taxInvoiceVO.setSgst(taxInvoiceDTO.getSgst());
+		taxInvoiceVO.setCgst(taxInvoiceDTO.getCgst());
+		}
+		else if (taxInvoiceDTO.getIgst()!=0){
+			long taxAmount = ( taxInvoiceDTO.getIgst()) * totalAmount / 100;
+			taxInvoiceVO.setTotal(totalAmount + taxAmount);
+			
 			taxInvoiceVO.setIgst(taxInvoiceDTO.getIgst());
-			taxInvoiceVO.setTotal(taxInvoiceDTO.getTotal());
-			taxInvoiceVO.setSubTotal(taxInvoiceDTO.getSubTotal());
-			taxInvoiceVO.setTermsAndConditions(taxInvoiceDTO.getTermsAndConditions());
-			taxInvoiceVO.setBankName(taxInvoiceDTO.getBankName());
-			taxInvoiceVO.setAccountName(taxInvoiceDTO.getAccountName());
-			taxInvoiceVO.setAccountNo(taxInvoiceDTO.getAccountNo());
-			taxInvoiceVO.setIfsc(taxInvoiceDTO.getIfsc());
-			taxInvoiceVO.setNotes(taxInvoiceDTO.getNotes());
-			taxInvoiceVO.setTaxInvoiceimage(taxInvoiceDTO.getTaxInvoiceimage());
-			taxInvoiceVO.setOrgId(taxInvoiceDTO.getOrgId());
+		}
+		else{
+			long taxAmount = ( taxInvoiceDTO.getTax()) * totalAmount / 100;
+			taxInvoiceVO.setTotal(totalAmount + taxAmount); 
 			taxInvoiceVO.setTax(taxInvoiceDTO.getTax());
 
 		}
-
-		@Override
-		public List<TaxInvoiceVO> getAllTaxInvoice(Long orgId) {
-
-			return taxInvoiceRepo.findAllByOrgId(orgId);
-		}
-
-		@Override
-		public TaxInvoiceVO getTaxInvoiceById(Long id) {
-			return taxInvoiceRepo.findById(id).get();
-		}
 		
-		@Override
-		public List<TaxInvoiceVO> getAllTaxInvoice( ) {
-			return taxInvoiceRepo.findAll();
+		taxInvoiceVO.setSubTotal(totalAmount);
+		taxInvoiceVO.setTermsAndConditions(taxInvoiceDTO.getTermsAndConditions());
+		taxInvoiceVO.setBankName(taxInvoiceDTO.getBankName());
+		taxInvoiceVO.setAccountName(taxInvoiceDTO.getAccountName());
+		taxInvoiceVO.setAccountNo(taxInvoiceDTO.getAccountNo());
+		taxInvoiceVO.setIfsc(taxInvoiceDTO.getIfsc());
+		taxInvoiceVO.setNotes(taxInvoiceDTO.getNotes());
+		taxInvoiceVO.setTaxInvoiceimage(taxInvoiceDTO.getTaxInvoiceimage());
+
+	}
+
+	@Override
+	public List<TaxInvoiceVO> getAllTaxInvoice(Long orgId) {
+
+		return taxInvoiceRepo.findAllByOrgId(orgId);
+	}
+
+	@Override
+	public TaxInvoiceVO getTaxInvoiceById(Long id) {
+		return taxInvoiceRepo.findById(id).get();
+	}
+
+	@Override
+	public List<TaxInvoiceVO> getAllTaxInvoice() {
+		return taxInvoiceRepo.findAll();
+	}
+
+	@Override
+	public TaxInvoiceVO uploadImageForTaxInvoice(MultipartFile file, Long id) throws IOException {
+		LOGGER.debug("Uploading Taxinvoice image for id: {}", id);
+		TaxInvoiceVO taxInvoiceVO = taxInvoiceRepo.findById(id).orElseThrow(() -> {
+			LOGGER.error("Taxinvoice not found for id: {}", id);
+			return new RuntimeException("Taxinvoice not found");
+		});
+		taxInvoiceVO.setTaxInvoiceimage(file.getBytes());
+		LOGGER.debug("Taxinvoice image uploaded successfully for id: {}", id);
+		return taxInvoiceRepo.save(taxInvoiceVO);
+	}
+
+	@Override
+	public byte[] getTaxInvoiceImageById(Long id) {
+		LOGGER.debug("Retrieving TaxInvoice image for id: {}", id);
+
+		TaxInvoiceVO taxInvoiceVO = taxInvoiceRepo.findById(id).orElseThrow(() -> {
+			LOGGER.error("TaxInvoice not found for id: {}", id);
+			return new RuntimeException("TaxInvoice not found");
+		});
+
+		byte[] image = taxInvoiceVO.getTaxInvoiceimage();
+
+		if (image == null || image.length == 0) {
+			LOGGER.error("No image data found for TaxInvoice with id: {}", id);
+		} else {
+			LOGGER.debug("TaxInvoice image retrieved successfully for id: {}", id);
 		}
-		
-		 @Override
-		    public TaxInvoiceVO uploadImageForTaxInvoice(MultipartFile file, Long id) throws IOException {
-		        LOGGER.debug("Uploading Taxinvoice image for id: {}", id);
-		        TaxInvoiceVO taxInvoiceVO = taxInvoiceRepo.findById(id).orElseThrow(() -> {
-		            LOGGER.error("Taxinvoice not found for id: {}", id);
-		            return new RuntimeException("Taxinvoice not found");
-		        });
-		        taxInvoiceVO.setTaxInvoiceimage(file.getBytes());
-		        LOGGER.debug("Taxinvoice image uploaded successfully for id: {}", id);
-		        return taxInvoiceRepo.save(taxInvoiceVO);
-		    }
-	
-		 
-		  @Override
-		    public byte[] getTaxInvoiceImageById(Long id) {
-		        LOGGER.debug("Retrieving TaxInvoice image for id: {}", id);
 
-		        TaxInvoiceVO taxInvoiceVO = taxInvoiceRepo.findById(id).orElseThrow(() -> {
-		            LOGGER.error("TaxInvoice not found for id: {}", id);
-		            return new RuntimeException("TaxInvoice not found");
-		        });
-
-		        byte[] image = taxInvoiceVO.getTaxInvoiceimage();
-
-		        if (image == null || image.length == 0) {
-		            LOGGER.error("No image data found for TaxInvoice with id: {}", id);
-		        } else {
-		            LOGGER.debug("TaxInvoice image retrieved successfully for id: {}", id);
-		        }
-
-		        return image;
-		    }
+		return image;
+	}
 }

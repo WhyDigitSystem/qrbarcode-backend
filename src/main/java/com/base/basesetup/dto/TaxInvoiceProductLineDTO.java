@@ -11,8 +11,7 @@ public class TaxInvoiceProductLineDTO {
 
 	private Long id;
 	private String description;
-	private String quantity;
-	private String rate;
-	private Long amount; 
+	private int quantity;
+	private int rate;
 }
 

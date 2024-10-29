@@ -25,8 +25,6 @@ public class TaxInvoiceDTO {
 	private Integer sgst;
 	private Integer cgst;
 	private Integer igst;
-	private Long total;
-	private Long subTotal;
 	private String termsAndConditions;
 	private String bankName;
 	private String accountName;
@@ -34,8 +32,7 @@ public class TaxInvoiceDTO {
 	private String Ifsc;
 	private String notes;
 	private String createdBy;
-	private String modifiedBy;
-	private Long orgId;
+//	private Long orgId;
 	private byte[] taxInvoiceimage;
 
 
