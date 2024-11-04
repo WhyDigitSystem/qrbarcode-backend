@@ -230,17 +230,27 @@ public class MasterServiceImpl implements MasterService {
 		
 		taxInvoiceVO.setSgst(taxInvoiceDTO.getSgst());
 		taxInvoiceVO.setCgst(taxInvoiceDTO.getCgst());
+		taxInvoiceVO.setIgst(0);
+		taxInvoiceVO.setTax(0);
+
 		}
 		else if (taxInvoiceDTO.getIgst()!=0){
 			long taxAmount = ( taxInvoiceDTO.getIgst()) * totalAmount / 100;
 			taxInvoiceVO.setTotal(totalAmount + taxAmount);
 			
 			taxInvoiceVO.setIgst(taxInvoiceDTO.getIgst());
+			taxInvoiceVO.setSgst(0);
+			taxInvoiceVO.setCgst(0);
+			taxInvoiceVO.setTax(0);
+
 		}
 		else{
 			long taxAmount = ( taxInvoiceDTO.getTax()) * totalAmount / 100;
 			taxInvoiceVO.setTotal(totalAmount + taxAmount); 
 			taxInvoiceVO.setTax(taxInvoiceDTO.getTax());
+			taxInvoiceVO.setIgst(0);
+			taxInvoiceVO.setSgst(0);
+			taxInvoiceVO.setCgst(0);
 
 		}
 		
