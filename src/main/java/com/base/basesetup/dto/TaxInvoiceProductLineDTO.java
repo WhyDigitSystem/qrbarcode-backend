@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TaxInvoiceProductLineDTO {
 
-	private Long id;
 	private String description;
 	private int quantity;
 	private int rate;

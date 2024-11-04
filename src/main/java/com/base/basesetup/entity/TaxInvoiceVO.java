@@ -107,7 +107,7 @@ public class TaxInvoiceVO {
 	private String updatedBy;
 
 	@Column(name = "orgid")
-	private Long orgId;
+	private Long orgId =1000000013L;
 
 	private boolean cancel = false;
 
