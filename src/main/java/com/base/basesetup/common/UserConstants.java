@@ -44,5 +44,6 @@ public class UserConstants {
 	public static final String USER_ACTION_ADD_EMPLOYEE_VERIFICATION = "ADD_EMPLOYEE_VERIFICATION";
 	public static final String USER_ACTION_ADD_ACCOUNT = "ADD_ACCOUNT";
 	public static final String USER_ACTION_REMOVE_ACCOUNT = "REMOVE_ACCOUNT";
+	public static final String ERROR_MSG_METHOD_NAME = "MethodName : {} Error : {}";
 
 }
