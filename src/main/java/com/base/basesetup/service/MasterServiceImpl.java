@@ -1,7 +1,6 @@
 package com.base.basesetup.service;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,24 +75,6 @@ public class MasterServiceImpl implements MasterService {
 		mapTaxInvoiceDTOToTaxInvoiceVO(taxInvoiceDTO, taxInvoiceVO);
 		taxInvoiceVO = taxInvoiceRepo.save(taxInvoiceVO);
 
-		// Delete any existing product lines and save the new ones
-		List<TaxInvoiceProductLineVO> existingProductLines = taxInvoiceProductLineRepo.findByTaxInvoiceVO(taxInvoiceVO);
-		taxInvoiceProductLineRepo.deleteAll(existingProductLines);
-
-		List<TaxInvoiceProductLineVO> taxInvoiceProductLineVOs = new ArrayList<>();
-		for (TaxInvoiceProductLineDTO productLineDTO : taxInvoiceDTO.getProductLines()) {
-			TaxInvoiceProductLineVO productLineVO = new TaxInvoiceProductLineVO();
-			productLineVO.setDescription(productLineDTO.getDescription());
-			productLineVO.setQuantity(productLineDTO.getQuantity());
-			productLineVO.setRate(productLineDTO.getRate());
-			productLineVO.setAmount((long) productLineDTO.getQuantity() * productLineDTO.getRate()); // Calculate amount
-			productLineVO.setTaxInvoiceVO(taxInvoiceVO); // Set the parent TaxInvoiceVO reference
-			taxInvoiceProductLineVOs.add(productLineVO);
-		}
-		taxInvoiceProductLineRepo.saveAll(taxInvoiceProductLineVOs); // Save all new product lines
-
-		taxInvoiceVO.setProductLines(taxInvoiceProductLineVOs); // Set the saved product lines if needed
-
 		Map<String, Object> response = new HashMap<>();
 		response.put("taxInvoiceVO", taxInvoiceVO);
 		response.put("message", message);
@@ -154,6 +135,32 @@ public class MasterServiceImpl implements MasterService {
 		taxInvoiceVO.setIfsc(taxInvoiceDTO.getIfsc());
 		taxInvoiceVO.setNotes(taxInvoiceDTO.getNotes());
 		taxInvoiceVO.setTaxInvoiceimage(taxInvoiceDTO.getTaxInvoiceimage());
+		
+		
+
+		if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+			List<TaxInvoiceProductLineVO> existingProductLines = taxInvoiceProductLineRepo
+					.findByTaxInvoiceVO(taxInvoiceVO);
+			taxInvoiceProductLineRepo.deleteAll(existingProductLines);
+		}
+
+//		// Delete any existing product lines and save the new ones
+//		List<TaxInvoiceProductLineVO> existingProductLines = taxInvoiceProductLineRepo.findByTaxInvoiceVO(taxInvoiceVO);
+//		taxInvoiceProductLineRepo.deleteAll(existingProductLines);
+
+		List<TaxInvoiceProductLineVO> taxInvoiceProductLineVOs = new ArrayList<>();
+		for (TaxInvoiceProductLineDTO productLineDTO : taxInvoiceDTO.getProductLines()) {
+			TaxInvoiceProductLineVO productLineVO = new TaxInvoiceProductLineVO();
+			productLineVO.setDescription(productLineDTO.getDescription());
+			productLineVO.setQuantity(productLineDTO.getQuantity());
+			productLineVO.setRate(productLineDTO.getRate());
+			productLineVO.setAmount((long) productLineDTO.getQuantity() * productLineDTO.getRate()); // Calculate amount
+			productLineVO.setTaxInvoiceVO(taxInvoiceVO); // Set the parent TaxInvoiceVO reference
+			taxInvoiceProductLineVOs.add(productLineVO);
+		}
+		taxInvoiceProductLineRepo.saveAll(taxInvoiceProductLineVOs); // Save all new product lines
+
+		taxInvoiceVO.setProductLines(taxInvoiceProductLineVOs); // Set the saved product lines if needed
 
 	}
 
@@ -193,7 +200,7 @@ public class MasterServiceImpl implements MasterService {
 			LOGGER.error("TaxInvoice not found for id: {}", id);
 			return new RuntimeException("TaxInvoice not found");
 		});
-
+ 
 		byte[] image = taxInvoiceVO.getTaxInvoiceimage();
 
 		if (image == null || image.length == 0) {
@@ -203,5 +210,6 @@ public class MasterServiceImpl implements MasterService {
 		}
 
 		return image;
-	}
-}
+	} 
+	
+}    
